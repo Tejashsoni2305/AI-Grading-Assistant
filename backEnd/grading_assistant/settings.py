@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'djongo',
+    'pymongo',
 ]
 
 MIDDLEWARE = [
@@ -79,10 +80,14 @@ WSGI_APPLICATION = 'grading_assistant.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'djongo',
+        'NAME': 'graderDb',
+        'CLIENT': {
+            'host': 'mongodb+srv://tejash2990s:db12345@aiassistantgrader.9kavk.mongodb.net/?retryWrites=true&w=majority&appName=aiAssistantGrader',
+        }
     }
 }
+
 
 
 # Password validation
