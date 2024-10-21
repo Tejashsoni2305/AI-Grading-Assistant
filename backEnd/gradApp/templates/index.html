@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Submissions</title>
+</head>
+<body>
+    <h1>List of Student Submissions</h1>
+    
+    {% if submissions %}
+        <ul>
+            {% for submission in submissions %}
+                <li>
+                    <strong>{{ submission.student_name }}</strong><br>
+                    <p>{{ submission.submission_text }}</p>
+                    <p>Submission type: {{ submission.submission_type}}</p>
+                    <p>Submitted on: {{ submission.date_submitted }}</p>
+                    
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No submissions found.</p>
+    {% endif %}
+
+    <h1>List of Graded Results</h1>
+
+    {% if results %}
+        <ul>
+            {% for result in results %}
+                <li>
+                    <strong>{{ result.submission.student_name }}</strong><br>
+                    <p>Grade: {{ result.score }}</p>
+                    <p>Feedback: {{ result.feedback }}</p>
+                    <p>Graded on: {{ result.date_graded }}</p>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No graded results found.</p>
+    {% endif %}
+    
+</body>
+</html>

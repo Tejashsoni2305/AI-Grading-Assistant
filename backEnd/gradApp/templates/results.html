@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grading Results</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Grading Results</h1>
+        
+        <h2>Student Submission Details</h2>
+        
+        <p><strong>Student Name:</strong> {{ submission.student_name }}</p>
+        <p><strong>Question Topic:</strong> {{ submission.question_or_topic }}</p>
+        <p><strong>Submission Type:</strong> {{ submission.submission_type }}</p>
+        <p><strong>Submission Text:</strong></p>
+        <pre>{{ submission.submission_text }}</pre>
+        
+        <h2>Grading Feedback</h2>
+        <p><strong>Grade:</strong> {{ resultObject.score }}</p>
+        <p><strong>Feedback:</strong></p>
+        <pre>{{ resultObject.feedback }}</pre>
+    </div>
+</body>
+</html>

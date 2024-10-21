@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grade Submission</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        form {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        textarea, input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 8px;
+            margin-bottom: 16px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Submit Your Work for Grading</h1>
+
+    <form method="POST">
+        {% csrf_token %}
+        
+        <label for="student_name">Student Name:</label>
+        <input type="text" id="student_name" name="student_name" required>
+        
+        <label for="question_topic">Question/Topic:</label>
+        <input type="text" id="question_topic" name="question_topic" required>
+        
+        <label for="submission_type">Type of Submission:</label>
+        <input type="text" id="submission_type" name="submission_type" placeholder="e.g., Essay, Report, Multiple Choice" required>
+
+        <label for="submission_text">Submission:</label>
+        <textarea id="submission_text" name="submission_text" rows="10" placeholder="Enter your answer here" required></textarea>
+
+        <button type="submit">Submit for Grading</button>
+    </form>
+
+</body>
+</html>
