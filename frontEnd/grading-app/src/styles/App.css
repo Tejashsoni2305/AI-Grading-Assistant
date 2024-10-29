@@ -1,0 +1,92 @@
+/* General app styling */
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: Arial, sans-serif;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-image: url('../images/background.jpg'); /* Add your image path */
+  background-size: cover;
+  background-position: center;
+  text-align: center;
+}
+
+/* Flex-grow for main content */
+.app > *:not(.footer) {
+  flex-grow: 1;
+}
+
+h1 {
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.error {
+  color: red;
+}
+
+/* Overlay styling */
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  color: #fff;
+}
+
+/* Button and form input styles */
+button {
+  padding: 10px 20px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #218838;
+}
+
+/* Form styling */
+form {
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  max-width: 400px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+input, textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* Footer styling */
+.footer {
+  background-color: #333;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  font-size: 14px;
+}

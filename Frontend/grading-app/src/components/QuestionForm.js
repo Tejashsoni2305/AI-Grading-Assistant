@@ -1,84 +1,109 @@
-// src/components/QuestionForm.js
-
 import React, { useState } from 'react';
-// import axios from 'axios'; // We'll use this later for the backend connection
+import '../styles/QuestionForm.css';  // Import the CSS
 
-const QuestionForm = ({ setResponse }) => {
+function QuestionForm({ setResponse, setLoading, setError }) {
+  const [questionType, setQuestionType] = useState('Essay');
   const [question, setQuestion] = useState('');
   const [answer, setAnswer] = useState('');
+  const [name, setName] = useState('');
+  const [id, setId] = useState('');
 
-  const formStyle = {
-    margin: '20px auto',
-    padding: '20px',
-    border: '1px solid #ccc',
-    borderRadius: '8px',
-    maxWidth: '500px',
-    backgroundColor: '#f9f9f9',
-  };
-
-  const labelStyle = {
-    display: 'block',
-    marginBottom: '8px',
-    fontSize: '16px',
-    fontWeight: 'bold',
-    textAlign: 'left',
-  };
-
-  const inputStyle = {
-    width: '100%',
-    padding: '10px',
-    marginBottom: '15px',
-    border: '1px solid #ccc',
-    borderRadius: '5px',
-    fontSize: '14px',
-  };
-
-  const buttonStyle = {
-    padding: '10px 20px',
-    backgroundColor: '#28a745',
-    color: 'white',
-    border: 'none',
-    borderRadius: '5px',
-    cursor: 'pointer',
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Mock response for now
-    const mockResponse = {
-      message: 'Answer received and is being graded.',
-      score: Math.floor(Math.random() * 10) + 1, // Random score for demonstration
-    };
-
-    setResponse(mockResponse);
+    setLoading(true);
+    setError(null);
+  
+    try {
+      const response = await fetch('http://localhost:8000/api/grade/', {
+        method: 'POST',
+        body: JSON.stringify({ questionType, question, answer, name, id }),
+        headers: { 'Content-Type': 'application/json' },
+      });
+  
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+  
+      const data = await response.json();
+      setResponse(data);
+    } catch (error) {
+      setError('Failed to submit question.'); // This error will be displayed in App.js
+      console.error("Error while grading:", error); // Log the exact error in console
+    } finally {
+      setLoading(false);
+    }
   };
+  
 
   return (
-    <form onSubmit={handleSubmit} style={formStyle}>
-      <div>
-        <label style={labelStyle}>Question:</label>
-        <input
-          type="text"
-          value={question}
-          onChange={(e) => setQuestion(e.target.value)}
-          required
-          style={inputStyle}
-        />
+    <form className="question-form" onSubmit={handleSubmit}>
+      <div className="form-container">  {/* New container for the form fields */}
+        <div className="name-id-container">
+          <label className="name-id-label">
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="name-input"
+              placeholder="Enter your name"
+            />
+          </label>
+
+          <label className="name-id-label">
+            <input
+              type="text"
+              value={id}
+              onChange={(e) => setId(e.target.value)}
+              className="id-input"
+              placeholder="Enter your ID"
+            />
+          </label>
+        </div>
+
+        <label className="question-type-label">
+          Question Type:
+          <select
+            value={questionType}
+            onChange={(e) => setQuestionType(e.target.value)}
+            className="question-type-select"
+          >
+            <option value="Essay">Essay</option>
+            <option value="Multiple Choice">Multiple Choice</option>
+            <option value="Fill in the Blanks">Fill in the Blanks</option>
+            <option value="Short Answer">Short Answer</option>
+          </select>
+        </label>
+
+        <div className="question-answer-container">
+          <label className="question-label">
+            Question:
+            <textarea
+              value={question}
+              onChange={(e) => setQuestion(e.target.value)}
+              rows="3"
+              cols="50"
+              className="question-box"
+              placeholder="Enter your question here"
+            />
+          </label>
+
+          <label className="answer-label">
+            Answer:
+            <textarea
+              value={answer}
+              onChange={(e) => setAnswer(e.target.value)}
+              rows="6"
+              cols="50"
+              className="answer-box"
+              placeholder="Enter your answer here"
+            />
+          </label>
+        </div>
+
+        <button type="submit" className="submit-btn">Submit</button>
       </div>
-      <div>
-        <label style={labelStyle}>Your Answer:</label>
-        <textarea
-          value={answer}
-          onChange={(e) => setAnswer(e.target.value)}
-          required
-          rows="5"
-          style={inputStyle}
-        />
-      </div>
-      <button type="submit" style={buttonStyle}>Submit for Grading</button>
     </form>
   );
-};
+}
 
 export default QuestionForm;

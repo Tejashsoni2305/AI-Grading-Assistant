@@ -1,70 +1,55 @@
 from django.shortcuts import render, get_object_or_404
 from .models import StudentSubmission, GradingResult
-from django.http import HttpResponseRedirect
-from django.urls import reverse
-
-
+from django.http import JsonResponse
+from rest_framework.decorators import api_view
+from .serializers import StudentSubmissionSerializer, GradingResultSerializer
 import requests
-
-import datetime
-
 import openai
-
+import os
 from dotenv import load_dotenv
 
-import os
-
-load_dotenv()
-
+# Load environment variables
+load_dotenv(os.path.join(os.path.dirname(__file__), 'backEnd', '.env'))
 openai.api_key = os.getenv('OPENAI_API_KEY')
 
-
-# Create your views here.
-
+# Index view to render submissions and results
 def index(request):
     submissions = StudentSubmission.objects.all()
     results = GradingResult.objects.all()
     context = {'submissions': submissions, 'results': results}
     return render(request, 'index.html', context)
 
+# API endpoint to submit an answer
+@api_view(['POST'])
 def submitAnswer(request):
-    if request.method == 'POST':
-        studentName = request.POST.get('student_name')
-        questionTopic = request.POST.get('question_topic')
-        submitType = request.POST.get('submission_type')
-        submissionText = request.POST.get('submission_text')
+    serializer = StudentSubmissionSerializer(data=request.data)
+    if serializer.is_valid():
+        submission = serializer.save()
+        return JsonResponse({'submission_id': submission.id}, status=201)
     
-        submission = StudentSubmission.objects.create(
-                        student_name = studentName,
-                        question_or_topic = questionTopic,
-                        submission_type = submitType,
-                        submission_text = submissionText
-                    )
+    return JsonResponse(serializer.errors, status=400)
 
-        return HttpResponseRedirect(reverse('results', args=[submission.id]))
-        
-       
-    
-
-    return render(request, 'submit.html')
-
-
+# API endpoint to retrieve grading results
+@api_view(['GET'])
 def results(request, submission_id):
     submission = get_object_or_404(StudentSubmission, id=submission_id)
     answerToGrade = submission.submission_text
     topicOrQuestion = submission.question_or_topic
     typeOfQuestion = submission.submission_type
 
-    response = openai.ChatCompletion.create(
-        model="gpt-4-turbo",
-        messages=[
-            {"role": "user", "content": (
+    # Define grading logic based on submission type
+    response = None
+    if typeOfQuestion.lower() == "essay":
+        response = openai.ChatCompletion.create(
+            model="gpt-4-turbo",
+            messages=[{"role": "user", "content": (
                 f"Grade the following essay submission on the topic of '{topicOrQuestion}' out of 100 based on the criteria below. "
                 "Please total up the individual rubric scores and provide a final grade based on the sum of these scores. "
                 "Ensure the final grade reflects the exact total, and format your response as 'Grade: (single integer) - Feedback: (short feedback, breakdown).' "
                 "Strictly adhere to the rubric, and do not be lenient, especially on content quality and depth.\n\n"
                 "Grading Criteria:\n"
-                "First of all check if it has atleast 200 words and also atleast 3 paragraphs, if not then it cannot score more than 30 no matter what. if its not fullfilling this condition then see the final grade and deduct marks to limit the final grade less than 30\n"
+                "First of all check if it has at least 200 words and also at least 3 paragraphs, if not then it cannot score more than 30 no matter what. "
+                "If it is not fulfilling this condition then see the final grade and deduct marks to limit the final grade less than 30.\n"
                 "1. Content (40 points): Assess the depth of analysis and the ability to cover key points comprehensively.\n"
                 "2. Structure (30 points): Evaluate the organization of the essay. It should have a clear introduction, body, and conclusion.\n"
                 "3. Examples (20 points): Check for specific examples or evidence that support the arguments made in the essay.\n"
@@ -72,14 +57,54 @@ def results(request, submission_id):
                 "5. Word Count: If the essay is under 200 words or less than three paragraphs it cannot score more than 30 as final grade.\n\n"
                 "Calculate the total grade based on these scores and ensure the feedback matches the scoring.\n\n"
                 f"Submission: {answerToGrade}"
-            )}
-        ],
-        temperature=0.0,  # Low temperature for deterministic responses
-    )
+            )}],
+            temperature=0.0,
+        )
 
+    elif typeOfQuestion.lower() == "report":
+        response = openai.ChatCompletion.create(
+            model="gpt-4-turbo",
+            messages=[{"role": "user", "content": (
+                f"Grade the following report submission on the topic of '{topicOrQuestion}' out of 100 based on the criteria below. "
+                "Please total up the individual rubric scores and provide a final grade based on the sum of these scores. "
+                "Ensure the final grade reflects the exact total, and format your response as 'Grade: (single integer) - Feedback: (short feedback, breakdown of individual rubric section).' "
+                "Strictly adhere to the rubric, and avoid leniency, especially on content quality and depth.\n\n"
+                "Grading Criteria:\n"
+                "First, check if the report has at least 300 words and a minimum of four sections (e.g., Introduction, Analysis, Conclusion). "
+                "If it fails to meet these requirements, limit the grade to a maximum of 30 points regardless of other criteria.\n\n"
+                "1. Content Depth (40 points): Assess the report's detail, coverage of essential points, and analysis depth.\n"
+                "2. Organization (30 points): Evaluate the structure, including logical flow between sections, clear headings, and coherence.\n"
+                "3. Supporting Evidence (20 points): Check for specific examples, references, or data that strengthen the report's claims.\n"
+                "4. Relevance (10 points): Ensure the report stays focused on the topic without irrelevant information.\n"
+                "5. Word Count: If the report is under 300 words or lacks four distinct sections, cap the score at 30 points.\n\n"
+                "Calculate the total grade based on these scores and ensure the feedback matches the scoring.\n\n"
+                f"Submission: {answerToGrade}"
+            )}],
+            temperature=0.0,
+        )
 
+    elif typeOfQuestion.lower() == "short answer":
+        response = openai.ChatCompletion.create(
+            model="gpt-4-turbo",
+            messages=[{"role": "user", "content": (
+                f"Grade the following short answer submission for the question: '{topicOrQuestion}' out of 20 based on the criteria below. "
+                "Please total up the individual rubric scores and provide a final grade based on the sum of these scores. "
+                "Ensure the final grade reflects the exact total, and format your response as 'Grade: (single integer) - Feedback: (short feedback, breakdown).' "
+                "Strictly adhere to the rubric, with no leniency on clarity, relevance, or accuracy.\n\n"
+                "Grading Criteria:\n"
+                "1. Relevance (5 points): Evaluate whether the answer directly addresses the question and stays on topic.\n"
+                "2. Clarity and Precision (5 points): Check if the answer is clear, concise, and to the point. Deduct points for vagueness or irrelevant information.\n"
+                "3. Understanding (5 points): Assess the depth of understanding shown in the answer. Look for evidence of familiarity with the main concepts.\n"
+                "4. Accuracy (5 points): Verify the factual correctness of the response, and ensure any examples provided are appropriate.\n\n"
+                "Calculate the total grade based on these scores, and ensure the feedback aligns with the grading.\n\n"
+                f"Submission: {answerToGrade}"
+            )}],
+            temperature=0.0,
+        )
+
+    # Process the response from OpenAI
     response_content = response.choices[0].message["content"]
-
+    
     try:
         # Attempt to split the response content
         gradeLine, feedbackLine = response_content.split(" - ")
@@ -87,16 +112,16 @@ def results(request, submission_id):
     except ValueError:
         # Log the response content for debugging
         print("Error parsing the response:", response_content)
-        return render(request, 'results.html', {'submission': submission, 'error': 'Failed to parse the grading response.'})
+        return JsonResponse({'error': 'Failed to parse the grading response.'}, status=500)
 
-
+    # Save the grading result
     resultObject = GradingResult.objects.create(
-                        submission = submission,
-                        score = grade,
-                        feedback = feedbackLine,
-                    )
+        submission=submission,
+        score=grade,
+        feedback=feedbackLine,
+    )
 
+    # Serialize the result and return as JSON
+    result_serializer = GradingResultSerializer(resultObject)
+    return JsonResponse(result_serializer.data, status=200)
 
-
-
-    return render(request, 'results.html', {'submission': submission, 'resultObject': resultObject})

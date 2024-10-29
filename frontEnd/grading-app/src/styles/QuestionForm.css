@@ -1,0 +1,133 @@
+/* Container for the entire form */
+.question-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px auto;
+  padding: 30px;  /* Increased padding for more space inside the form */
+  border: 2px solid #ccc;  /* Slightly thicker border for more emphasis */
+  border-radius: 10px;  /* Softer rounded corners */
+  max-width: 650px;  /* Adjusted max width for a slightly wider form */
+  background-color: #f8f8f8;  /* Slightly lighter background color */
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);  /* Add a subtle shadow effect */
+}
+
+/* Label for the question type dropdown */
+.question-type-label {
+  margin-bottom: 15px;
+  font-weight: bold;
+  font-size: 16px;  /* Increased font size for better readability */
+}
+
+/* Dropdown select for question type */
+.question-type-select {
+  margin-left: 10px;
+  padding: 8px;
+  font-size: 14px;  /* Uniform font size */
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+}
+
+/* Container for question and answer text areas */
+.question-answer-container {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+/* Labels for question and answer fields */
+.question-label,
+.answer-label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 15px;
+}
+
+/* Text area for question */
+.question-box {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;  /* Increased border-radius for a softer look */
+  font-size: 15px;
+  margin-bottom: 15px;  /* Increased margin for better spacing between fields */
+  background-color: #fff;
+  resize: vertical;  /* Allow vertical resizing */
+}
+
+/* Text area for answer */
+.answer-box {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 15px;
+  background-color: #fff;
+  resize: vertical;  /* Allow vertical resizing */
+}
+
+/* Container for Name and ID fields */
+.name-id-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;  /* Add space between the two fields */
+  margin-bottom: 25px;  /* Increased bottom margin for more spacing */
+}
+
+/* Name and ID input labels */
+.name-id-label {
+  flex: 1;
+}
+
+/* Style for Name and ID input fields */
+.name-input, .id-input {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 6px;  /* Increased border-radius */
+  background-color: #fff;
+  box-sizing: border-box;
+  margin-bottom: 5px;  /* Add some spacing between the inputs and labels */
+}
+
+/* Style for submit button */
+.submit-btn {
+  padding: 12px 25px;  /* Adjusted padding for a larger clickable area */
+  font-size: 16px;
+  color: white;
+  background-color: #28a745;  /* Changed to a green color for action emphasis */
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;  /* Smooth transition effect */
+}
+
+/* Hover effect for submit button */
+.submit-btn:hover {
+  background-color: #218838;  /* Darker green on hover */
+}
+
+/* Placeholder styling */
+::placeholder {
+  color: #999;
+  font-style: italic;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 600px) {
+  .question-form {
+    padding: 20px;
+    max-width: 100%;  /* Make form full-width on smaller screens */
+  }
+
+  .name-id-container {
+    flex-direction: column;  /* Stack Name and ID inputs vertically on mobile */
+  }
+
+  .submit-btn {
+    width: 100%;  /* Full-width submit button on mobile */
+  }
+}
