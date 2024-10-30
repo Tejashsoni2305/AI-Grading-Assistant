@@ -1,5 +1,3 @@
-// src/components/ResponseDisplay.js
-
 import React from 'react';
 
 const ResponseDisplay = ({ response }) => {
@@ -22,11 +20,11 @@ const ResponseDisplay = ({ response }) => {
   return (
     <div style={responseStyle}>
       <h2>Grading Result</h2>
-      <p>{response.message}</p>
+      <p>{response.feedback}</p>
       {response.score && <p style={scoreStyle}>Score: {response.score}/10</p>}
+      <p>Date Graded: {new Date(response.date_graded).toLocaleString()}</p>
     </div>
   );
 };
 
 export default ResponseDisplay;
-
