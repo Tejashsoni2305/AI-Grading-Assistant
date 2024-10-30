@@ -21,7 +21,7 @@ const ResponseDisplay = ({ response }) => {
     <div style={responseStyle}>
       <h2>Grading Result</h2>
       <p>{response.feedback}</p>
-      {response.score && <p style={scoreStyle}>Score: {response.score}/10</p>}
+      {response.score && <p style={scoreStyle}>Score: {response.score}</p>}
       <p>Date Graded: {new Date(response.date_graded).toLocaleString()}</p>
     </div>
   );
