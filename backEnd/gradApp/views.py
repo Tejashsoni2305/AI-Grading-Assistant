@@ -27,6 +27,7 @@ def submitAnswer(request):
         submission = serializer.save()
         return JsonResponse({'submission_id': submission.id}, status=201)
     
+    # Log serializer errors for debugging
     return JsonResponse(serializer.errors, status=400)
 
 # API endpoint to retrieve grading results

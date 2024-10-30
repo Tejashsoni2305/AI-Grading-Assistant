@@ -1,61 +1,58 @@
 import React, { useState } from 'react';
-import '../styles/QuestionForm.css';  // Import the CSS
+import '../styles/QuestionForm.css';
 
 function QuestionForm({ setResponse, setLoading, setError }) {
-  const [questionType, setQuestionType] = useState('Essay');
-  const [question, setQuestion] = useState('');
-  const [answer, setAnswer] = useState('');
-  const [name, setName] = useState('');
-  const [id, setId] = useState('');
+  const [submissionType, setSubmissionType] = useState('');
+  const [questionOrTopic, setQuestionOrTopic] = useState('');
+  const [submissionText, setSubmissionText] = useState('');
+  const [studentName, setStudentName] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
-  
+
+    // Log the payload to ensure fields match the backend expectations
+    const payload = {
+      submission_type: submissionType,
+      question_or_topic: questionOrTopic,
+      submission_text: submissionText,
+      student_name: studentName
+    };
+    console.log("Payload sent to backend:", payload);
+
     try {
-      const response = await fetch('http://localhost:8000/api/grade/', {
+      const response = await fetch('http://localhost:8000/submitAnswer/', {
         method: 'POST',
-        body: JSON.stringify({ questionType, question, answer, name, id }),
+        body: JSON.stringify(payload),
         headers: { 'Content-Type': 'application/json' },
       });
-  
+
       if (!response.ok) {
         throw new Error(`Error: ${response.status}`);
       }
-  
+
       const data = await response.json();
       setResponse(data);
     } catch (error) {
-      setError('Failed to submit question.'); // This error will be displayed in App.js
-      console.error("Error while grading:", error); // Log the exact error in console
+      setError('Failed to submit question.');
+      console.error("Error while grading:", error);
     } finally {
       setLoading(false);
     }
   };
-  
 
   return (
     <form className="question-form" onSubmit={handleSubmit}>
-      <div className="form-container">  {/* New container for the form fields */}
+      <div className="form-container">
         <div className="name-id-container">
           <label className="name-id-label">
             <input
               type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              value={studentName}
+              onChange={(e) => setStudentName(e.target.value)}
               className="name-input"
               placeholder="Enter your name"
-            />
-          </label>
-
-          <label className="name-id-label">
-            <input
-              type="text"
-              value={id}
-              onChange={(e) => setId(e.target.value)}
-              className="id-input"
-              placeholder="Enter your ID"
             />
           </label>
         </div>
@@ -63,14 +60,15 @@ function QuestionForm({ setResponse, setLoading, setError }) {
         <label className="question-type-label">
           Question Type:
           <select
-            value={questionType}
-            onChange={(e) => setQuestionType(e.target.value)}
+            value={submissionType}
+            onChange={(e) => {
+              console.log("Selected submission type:", e.target.value); 
+              setSubmissionType(e.target.value)}}
             className="question-type-select"
           >
-            <option value="Essay">Essay</option>
-            <option value="Multiple Choice">Multiple Choice</option>
-            <option value="Fill in the Blanks">Fill in the Blanks</option>
-            <option value="Short Answer">Short Answer</option>
+            <option value="essay">Essay</option>
+            <option value="report">Report</option>
+            <option value="short answer">Short-Answer</option>
           </select>
         </label>
 
@@ -78,8 +76,8 @@ function QuestionForm({ setResponse, setLoading, setError }) {
           <label className="question-label">
             Question:
             <textarea
-              value={question}
-              onChange={(e) => setQuestion(e.target.value)}
+              value={questionOrTopic}
+              onChange={(e) => setQuestionOrTopic(e.target.value)}
               rows="3"
               cols="50"
               className="question-box"
@@ -90,8 +88,8 @@ function QuestionForm({ setResponse, setLoading, setError }) {
           <label className="answer-label">
             Answer:
             <textarea
-              value={answer}
-              onChange={(e) => setAnswer(e.target.value)}
+              value={submissionText}
+              onChange={(e) => setSubmissionText(e.target.value)}
               rows="6"
               cols="50"
               className="answer-box"
