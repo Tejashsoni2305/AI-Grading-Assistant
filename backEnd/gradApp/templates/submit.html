@@ -48,7 +48,7 @@
 
     <h1>Submit Your Work for Grading</h1>
 
-    <form method="POST">
+    <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         
         <label for="student_name">Student Name:</label>
@@ -60,8 +60,11 @@
         <label for="submission_type">Type of Submission:</label>
         <input type="text" id="submission_type" name="submission_type" placeholder="e.g., Essay, Report, Multiple Choice" required>
 
-        <label for="submission_text">Submission:</label>
-        <textarea id="submission_text" name="submission_text" rows="10" placeholder="Enter your answer here" required></textarea>
+        <label for="submission_text">Submission (Text):</label>
+        <textarea id="submission_text" name="submission_text" rows="10" placeholder="Enter your answer here"></textarea>
+
+        <label for="submittedFile">Or Upload a PDF File:</label>
+        <input type="file" id="submittedFile" name="submittedFile" accept=".pdf">
 
         <button type="submit">Submit for Grading</button>
     </form>

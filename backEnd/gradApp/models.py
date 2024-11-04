@@ -9,7 +9,7 @@ class StudentSubmission(models.Model):
     ]
 
     student_name = models.CharField(max_length=255)
-    submission_text = models.TextField()  # The student's answer
+    submission_text = models.TextField(null=True, blank=True)  # The student's answer
     submission_type = models.CharField(
         max_length=50,
         choices=SUBMISSION_TYPE_CHOICES,
@@ -17,6 +17,7 @@ class StudentSubmission(models.Model):
     )
     question_or_topic = models.CharField(max_length=500, help_text="The question or topic of the submission.")
     date_submitted = models.DateTimeField(auto_now_add=True)
+    submittedFile = models.FileField(upload_to='uploads/', blank=True, null=True)
 
     def __str__(self):
         return f"{self.student_name} - {self.submission_type}"

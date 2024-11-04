@@ -7,7 +7,8 @@ import requests
 import openai
 import os
 from dotenv import load_dotenv
-
+from PyPDF2 import PdfReader
+import io
 # Load environment variables
 load_dotenv(os.path.join(os.path.dirname(__file__), 'backEnd', '.env'))
 openai.api_key = os.getenv('OPENAI_API_KEY')
@@ -19,22 +20,46 @@ def index(request):
     context = {'submissions': submissions, 'results': results}
     return render(request, 'index.html', context)
 
+
+#Text extracter function from pdf
+def extract_text_from_in_memory_file(file_field):
+    # Open and read the file into memory
+    file_field.open()
+    pdf_data = file_field.read()
+    file_field.close()
+
+    # Initialize text variable to collect content from each page
+    text = ""
+    pdf_reader = PdfReader(io.BytesIO(pdf_data))
+
+    # Loop through all pages and extract text
+    for page in pdf_reader.pages:
+        text += page.extract_text() or ""  # Use `or ""` to handle None values
+    return text
+
 # API endpoint to submit an answer
 @api_view(['POST'])
 def submitAnswer(request):
+    
+    print("Received request data:", request.data)
+
     serializer = StudentSubmissionSerializer(data=request.data)
     if serializer.is_valid():
         submission = serializer.save()
         return JsonResponse({'submission_id': submission.id}, status=201)
     
-    # Log serializer errors for debugging
     return JsonResponse(serializer.errors, status=400)
 
 # API endpoint to retrieve grading results
 @api_view(['GET'])
 def results(request, submission_id):
     submission = get_object_or_404(StudentSubmission, id=submission_id)
-    answerToGrade = submission.submission_text
+    
+    if(submission.submittedFile):
+        answerToGrade = extract_text_from_in_memory_file(submission.submittedFile)
+    else:
+        answerToGrade = submission.submission_text
+    
     topicOrQuestion = submission.question_or_topic
     typeOfQuestion = submission.submission_type
 

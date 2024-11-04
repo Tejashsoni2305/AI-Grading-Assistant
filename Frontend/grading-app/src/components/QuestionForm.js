@@ -5,6 +5,11 @@ function QuestionForm({ setSubmissionId, setLoading, setError }) {
   const [questionOrTopic, setQuestionOrTopic] = useState('');
   const [submissionText, setSubmissionText] = useState('');
   const [studentName, setStudentName] = useState('');
+  const [submittedFile, setSubmittedFile] = useState(null);
+
+  const handleFileChange = (e) => {
+    setSubmittedFile(e.target.files[0]);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -18,11 +23,20 @@ function QuestionForm({ setSubmissionId, setLoading, setError }) {
       student_name: studentName,
     };
 
+    const formData = new FormData();
+    formData.append('submission_type', submissionType);
+    formData.append('question_or_topic', questionOrTopic);
+    formData.append('submission_text', submissionText);
+    formData.append('student_name', studentName);
+    if (submittedFile) {
+      formData.append('submittedFile', submittedFile);
+    }
+
+
     try {
       const response = await fetch('http://localhost:8000/submitAnswer/', {
         method: 'POST',
-        body: JSON.stringify(payload),
-        headers: { 'Content-Type': 'application/json' },
+        body: formData,
       });
 
       if (!response.ok) {
@@ -50,10 +64,12 @@ function QuestionForm({ setSubmissionId, setLoading, setError }) {
         value={studentName}
         onChange={(e) => setStudentName(e.target.value)}
         placeholder="Enter your name"
+        required
       />
       <select
         value={submissionType}
         onChange={(e) => setSubmissionType(e.target.value)}
+        required
       >
         <option value="">Select Type</option>
         <option value="essay">Essay</option>
@@ -64,11 +80,17 @@ function QuestionForm({ setSubmissionId, setLoading, setError }) {
         value={questionOrTopic}
         onChange={(e) => setQuestionOrTopic(e.target.value)}
         placeholder="Enter question or topic"
+        required
       />
       <textarea
         value={submissionText}
         onChange={(e) => setSubmissionText(e.target.value)}
         placeholder="Enter your answer here"
+      />
+      <input
+        type="file"
+        accept=".pdf"
+        onChange={handleFileChange}
       />
       <button type="submit">Submit</button>
     </form>
