@@ -4,7 +4,7 @@ import '../styles/Navbar.css';  // Correct relative path
 function Navbar() {
   return (
     <div className="navbar">
-      <h3>Grading App</h3>
+      <h3>Grade you Answers</h3>
     </div>
   );
 }

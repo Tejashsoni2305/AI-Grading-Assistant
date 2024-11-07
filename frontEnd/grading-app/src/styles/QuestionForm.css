@@ -4,20 +4,24 @@
   flex-direction: column;
   align-items: center;
   margin: 20px auto;
-  padding: 30px;  /* Increased padding for more space inside the form */
-  border: 2px solid #ccc;  /* Slightly thicker border for more emphasis */
-  border-radius: 10px;  /* Softer rounded corners */
-  max-width: 650px;  /* Adjusted max width for a slightly wider form */
-  background-color: #f8f8f8;  /* Slightly lighter background color */
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);  /* Add a subtle shadow effect */
+  padding: 30px;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  max-width: 70%; /* Set max width as a percentage of the viewport */
+  width: 500px; /* You can set a specific width to make it consistently wider */
+  background-color: #f8f8f8;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
 }
 
+
 /* Label for the question type dropdown */
-.question-type-label {
+.question-type-label { 
   margin-bottom: 15px;
   font-weight: bold;
-  font-size: 16px;  /* Increased font size for better readability */
+  font-size: 16px; /* Increased font size for better readability */
+  color: #00e1ff; /* Replace with desired color code */
 }
+
 
 /* Dropdown select for question type */
 .question-type-select {
@@ -25,8 +29,8 @@
   padding: 8px;
   font-size: 14px;  /* Uniform font size */
   border-radius: 5px;
-  border: 1px solid #ccc;
-  background-color: #fff;
+  border: 1px solid #0569d5;
+  background-color: #f4efef;
 }
 
 /* Container for question and answer text areas */
@@ -43,6 +47,8 @@
   display: block;
   margin-bottom: 8px;
   font-size: 15px;
+  color: #00e1ff; /* Replace with desired color code */
+
 }
 
 /* Text area for question */

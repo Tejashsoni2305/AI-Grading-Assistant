@@ -4,20 +4,24 @@ body, html {
   padding: 0;
   height: 100%;
   font-family: Arial, sans-serif;
+  overflow-x: hidden;
 }
 
-.app {
+.App {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
   background-image: url('../images/background.jpg'); /* Add your image path */
   background-size: cover;
   background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
   text-align: center;
+  color: #fff;
 }
 
 /* Flex-grow for main content */
-.app > *:not(.footer) {
+.App > *:not(.footer) {
   flex-grow: 1;
 }
 

@@ -11,8 +11,15 @@ function Loader() {
     animation: 'spin 1s linear infinite',
   };
 
+  const containerStyle = {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100vh', // Full viewport height
+  };
+
   return (
-    <div>
+    <div style={containerStyle}>
       <div style={loaderStyle}></div>
     </div>
   );

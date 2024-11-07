@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import QuestionForm from './components/QuestionForm';
 import ResponseDisplay from './components/ResponseDisplay';
+import Navbar from './components/Navbar';
+import Footer from './components/Footer';
+import './styles/App.css';
+
 
 function App() {
   const [submissionId, setSubmissionId] = useState(null);
@@ -39,6 +43,9 @@ function App() {
       {loading && <p>Loading...</p>}
       {error && <p style={{ color: 'red' }}>{error}</p>}
       {response && <ResponseDisplay response={response} />}
+      <Navbar/>
+      <Footer/>
+
     </div>
   );
 }
