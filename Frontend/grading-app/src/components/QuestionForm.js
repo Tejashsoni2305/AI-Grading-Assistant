@@ -20,14 +20,6 @@ function QuestionForm({ setSubmissionId, setLoading, setError }) {
     setLoadingState(true); // Set loading to true
     setError(null);
 
-    const payload = {
-      submission_type: submissionType,
-      question_or_topic: questionOrTopic,
-      submission_text: submissionText,
-      student_name: studentName,
-      student_id: studentId,
-    };
-
     const formData = new FormData();
     formData.append('submission_type', submissionType);
     formData.append('question_or_topic', questionOrTopic);
