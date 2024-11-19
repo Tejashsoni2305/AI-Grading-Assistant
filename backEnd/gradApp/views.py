@@ -8,10 +8,16 @@ import openai
 import os
 from dotenv import load_dotenv
 from PyPDF2 import PdfReader
+import csv
 import io
+from django.http import HttpResponse
+
+from django.conf import settings
+
 # Load environment variables
-load_dotenv(os.path.join(os.path.dirname(__file__), 'backEnd', '.env'))
-openai.api_key = os.getenv('OPENAI_API_KEY')
+
+
+openai.api_key = settings.OPENAI_API_KEY
 
 # Index view to render submissions and results
 def index(request):
@@ -151,3 +157,73 @@ def results(request, submission_id):
     result_serializer = GradingResultSerializer(resultObject)
     return JsonResponse(result_serializer.data, status=200)
 
+
+
+
+@api_view(['POST'])
+def bulkSubmit(request):
+    csv_file = request.FILES['file']
+    file_data = csv_file.read().decode('utf-8')
+    csv_reader = csv.DictReader(io.StringIO(file_data))
+
+    responseFile = HttpResponse(
+        content_type="text/csv",
+        headers={"Content-Disposition": 'attachment; filename="Results.csv"'},
+    )
+    writer = csv.writer(responseFile, quoting=csv.QUOTE_ALL)
+    writer.writerow(["student_name", "topic_or_question", "grade", "feedback"])
+
+    for row in csv_reader:
+        # Extracting each submission's details
+
+        student_name = row.get("student_name")
+        answerToGrade = row.get("submission_text")
+        topicOrQuestion = row.get("question_or_topic")
+        typeOfQuestion = row.get("submission_type")
+
+        response = None
+        if typeOfQuestion.lower() == "essay":
+            response = openai.ChatCompletion.create(
+                model="gpt-4-turbo",
+                messages=[{"role": "user", "content": (
+                    f"Grade the following essay submission on the topic of '{topicOrQuestion}' out of 100 based on the criteria below. "
+                    "Please total up the individual rubric scores and provide a final grade based on the sum of these scores. "
+                    "Ensure the final grade reflects the exact total, and format your response as 'Grade: (single integer) - Feedback: (short feedback, breakdown).' "
+                    "Strictly adhere to the rubric, and do not be lenient, especially on content quality and depth.\n\n"
+                    "Grading Criteria:\n"
+                    "First of all check if it has at least 20 words and also at least 3 paragraphs, if not then it cannot score more than 30 no matter what. "
+                    "If it is not fulfilling this condition then see the final grade and deduct marks to limit the final grade less than 30.\n"
+                    "1. Content (40 points): Assess the depth of analysis and the ability to cover key points comprehensively.\n"
+                    "2. Structure (30 points): Evaluate the organization of the essay. It should have a clear introduction, body, and conclusion.\n"
+                    "3. Examples (20 points): Check for specific examples or evidence that support the arguments made in the essay.\n"
+                    "4. Relevance (10 points): Ensure the essay stays focused on the topic throughout. No off-topic discussions.\n"
+                    "5. Word Count: If the essay is under 200 words or less than three paragraphs it cannot score more than 30 as final grade.\n\n"
+                    "Calculate the total grade based on these scores and ensure the feedback matches the scoring.\n\n"
+                    f"Submission: {answerToGrade}"
+                )}],
+                temperature=0.0,
+            )
+        response_content = response.choices[0].message["content"]
+        try:
+            # Attempt to split the response content
+            gradeLine, feedbackLine = response_content.split(" - ")
+            grade = int(gradeLine.split(": ")[1])
+        except ValueError:
+            # Log the response content for debugging
+            grade = 0
+            feedback_line = "Error in response parsing."
+            
+        result = {
+                    "student_name": student_name,
+                    "topic_or_question": topicOrQuestion,
+                    "grade": grade,
+                    "feedback": feedbackLine
+                }
+        
+        
+        writer.writerow([student_name, topicOrQuestion, grade, feedbackLine])
+
+
+
+
+    return responseFile
