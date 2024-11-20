@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import '../styles/QuestionForm.css';
 import Loader from './Loader'; // Import your Loader component
+import ToggleSwitch from './ToggleSwitch'; // Import the new component
 
 function QuestionForm({ setSubmissionId, setLoading, setError }) {
   const [submissionType, setSubmissionType] = useState('');
@@ -83,13 +84,16 @@ function QuestionForm({ setSubmissionId, setLoading, setError }) {
       {loading ? (
         <Loader />
       ) : (
-        <>
-          <button
-            onClick={() => setIsBulkUpload(!isBulkUpload)}
-            className="toggle-btn"
-          >
-            {isBulkUpload ? 'Switch to Single Submission' : 'Switch to Bulk Upload'}
-          </button>
+        <div className="form-container">
+          <div className="toggle-container">
+            <ToggleSwitch
+              isBulkUpload={isBulkUpload}
+              setIsBulkUpload={setIsBulkUpload}
+            />
+            <span className="toggle-label">
+              {isBulkUpload ? 'Bulk Upload Mode' : 'Single Submission Mode'}
+            </span>
+          </div>
 
           {!isBulkUpload ? (
             <form onSubmit={handleSubmit} className="question-form">
@@ -173,7 +177,7 @@ function QuestionForm({ setSubmissionId, setLoading, setError }) {
               </button>
             </form>
           )}
-        </>
+        </div>
       )}
     </>
   );
