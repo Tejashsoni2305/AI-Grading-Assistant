@@ -1,5 +1,6 @@
 /* Container for the entire form */
-.question-form {
+.question-form,
+.bulk-upload-form {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -9,10 +10,9 @@
   border-radius: 10px;
   max-width: 70%; /* Set max width as a percentage of the viewport */
   width: 500px; /* You can set a specific width to make it consistently wider */
-  background-color: #f8f8f8;
+  background-color: #ffffff; /* Explicitly set white background */
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
 }
-
 
 /* Label for the question type dropdown */
 .question-type-label { 
@@ -21,7 +21,6 @@
   font-size: 16px; /* Increased font size for better readability */
   color: #00e1ff; /* Replace with desired color code */
 }
-
 
 /* Dropdown select for question type */
 .question-type-select {
@@ -48,7 +47,6 @@
   margin-bottom: 8px;
   font-size: 15px;
   color: #00e1ff; /* Replace with desired color code */
-
 }
 
 /* Text area for question */
@@ -124,7 +122,8 @@
 
 /* Mobile responsiveness */
 @media (max-width: 600px) {
-  .question-form {
+  .question-form,
+  .bulk-upload-form {
     padding: 20px;
     max-width: 100%;  /* Make form full-width on smaller screens */
   }
@@ -138,6 +137,7 @@
   }
 }
 
+/* Toggle Button */
 .toggle-btn {
   margin: 20px auto;
   padding: 10px 20px;
