@@ -8,17 +8,18 @@ function QuestionForm({ setSubmissionId, setLoading, setError }) {
   const [questionOrTopic, setQuestionOrTopic] = useState('');
   const [submissionText, setSubmissionText] = useState('');
   const [studentName, setStudentName] = useState('');
-  const [loading, setLoadingState] = useState(false); // Local loading state
+  const [studentId, setStudentId] = useState(''); // New state for student ID
+  const [loading, setLoadingState] = useState(false);
   const [submittedFile, setSubmittedFile] = useState(null);
-  const [bulkFile, setBulkFile] = useState(null); // State for bulk upload file
-  const [isBulkUpload, setIsBulkUpload] = useState(false); // Toggle state for bulk upload
+  const [bulkFile, setBulkFile] = useState(null);
+  const [isBulkUpload, setIsBulkUpload] = useState(false);
 
   const handleFileChange = (e) => {
     setSubmittedFile(e.target.files[0]);
   };
 
   const handleBulkFileChange = (e) => {
-    setBulkFile(e.target.files[0]); // Store single CSV file for bulk upload
+    setBulkFile(e.target.files[0]);
   };
 
   const handleSubmit = async (e) => {
@@ -29,20 +30,19 @@ function QuestionForm({ setSubmissionId, setLoading, setError }) {
     const formData = new FormData();
 
     if (isBulkUpload) {
-      // Bulk file upload for CSV
       if (bulkFile) {
-        formData.append('file', bulkFile); // Append the single CSV file
+        formData.append('file', bulkFile);
       } else {
         setError('Please upload a CSV file for bulk grading.');
         setLoadingState(false);
         return;
       }
     } else {
-      // Single submission upload
       formData.append('submission_type', submissionType);
       formData.append('question_or_topic', questionOrTopic);
       formData.append('submission_text', submissionText);
       formData.append('student_name', studentName);
+      formData.append('student_id', studentId); // Append student ID
       if (submittedFile) {
         formData.append('submittedFile', submittedFile);
       }
@@ -50,8 +50,8 @@ function QuestionForm({ setSubmissionId, setLoading, setError }) {
 
     try {
       const endpoint = isBulkUpload
-        ? 'http://localhost:8000/bulkSubmit/' // Bulk grading CSV endpoint
-        : 'http://localhost:8000/submitAnswer/'; // Single submission endpoint
+        ? 'http://localhost:8000/bulkSubmit/'
+        : 'http://localhost:8000/submitAnswer/';
 
       const response = await fetch(endpoint, {
         method: 'POST',
@@ -63,15 +63,14 @@ function QuestionForm({ setSubmissionId, setLoading, setError }) {
       }
 
       if (isBulkUpload) {
-        // Handle bulk upload response
-        const blob = await response.blob(); // Get the file as a Blob
-        const url = window.URL.createObjectURL(blob); // Create a URL for the Blob
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
-        link.setAttribute('download', 'GradingResults.csv'); // Set the file name
+        link.setAttribute('download', 'GradingResults.csv');
         document.body.appendChild(link);
-        link.click(); // Trigger the download
-        link.remove(); // Clean up the DOM
+        link.click();
+        link.remove();
       } else {
         const data = await response.json();
         if (data.submission_id) {
@@ -106,17 +105,29 @@ function QuestionForm({ setSubmissionId, setLoading, setError }) {
 
           {!isBulkUpload ? (
             <form onSubmit={handleSubmit} className="question-form">
-              {/* Single submission form */}
               <div className="name-id-container">
-                <input
-                  type="text"
-                  value={studentName}
-                  onChange={(e) => setStudentName(e.target.value)}
-                  placeholder="Enter your name"
-                  className="name-input"
-                  required
-                />
+                <div className="name-id-label">
+                  <input
+                    type="text"
+                    value={studentName}
+                    onChange={(e) => setStudentName(e.target.value)}
+                    placeholder="Enter your name"
+                    className="name-input"
+                    required
+                  />
+                </div>
+                <div className="name-id-label">
+                  <input
+                    type="text"
+                    value={studentId}
+                    onChange={(e) => setStudentId(e.target.value)}
+                    placeholder="Enter your ID"
+                    className="id-input"
+                    required
+                  />
+                </div>
               </div>
+
               <div className="question-type-label">
                 <label>Type of Submission:</label>
                 <select
@@ -157,7 +168,6 @@ function QuestionForm({ setSubmissionId, setLoading, setError }) {
             </form>
           ) : (
             <form onSubmit={handleSubmit} className="bulk-upload-form">
-              {/* Bulk upload form */}
               <div className="bulk-upload-container">
                 <label>Upload a CSV File for Bulk Grading:</label>
                 <input

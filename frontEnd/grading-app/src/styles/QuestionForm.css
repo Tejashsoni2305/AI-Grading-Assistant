@@ -154,3 +154,80 @@
   background-color: #0056b3;
 }
 
+/* Style for file input */
+input[type="file"] {
+  color: #007bff; /* Replace with your desired text color */
+  font-weight: bold; /* Optional: make text bold */
+  font-size: 14px; /* Adjust font size if needed */
+  cursor: pointer;
+}
+
+/* Additional styling to customize the file input field */
+input[type="file"]::-webkit-file-upload-button {
+  background-color: #28a745; /* Green button */
+  color: white; /* Button text color */
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+input[type="file"]::-webkit-file-upload-button:hover {
+  background-color: #218838; /* Darker green on hover */
+}
+
+/* Firefox-specific styling */
+input[type="file"]::-moz-file-upload-button {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+input[type="file"]::-moz-file-upload-button:hover {
+  background-color: #218838;
+}
+
+.bulk-upload-container {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.bulk-upload-label {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #00e1ff;
+}
+
+/* Updated Name and ID input styles */
+.name-id-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px; /* Space between Name and ID fields */
+  margin-bottom: 25px;
+}
+
+.name-id-label {
+  flex: 1; /* Ensures both inputs take equal space */
+}
+
+.name-input,
+.id-input {
+  width: 100%; /* Ensure equal width */
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #fff;
+  box-sizing: border-box;
+  margin-bottom: 5px;
+}
