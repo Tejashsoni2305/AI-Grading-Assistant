@@ -8,7 +8,7 @@ function QuestionForm({ setSubmissionId, setLoading, setError }) {
   const [questionOrTopic, setQuestionOrTopic] = useState('');
   const [submissionText, setSubmissionText] = useState('');
   const [studentName, setStudentName] = useState('');
-  const [studentId, setStudentId] = useState(''); // New state for student ID
+  // const [studentId, setStudentId] = useState(''); // New state for student ID
   const [loading, setLoadingState] = useState(false);
   const [submittedFile, setSubmittedFile] = useState(null);
   const [bulkFile, setBulkFile] = useState(null);
@@ -42,7 +42,7 @@ function QuestionForm({ setSubmissionId, setLoading, setError }) {
       formData.append('question_or_topic', questionOrTopic);
       formData.append('submission_text', submissionText);
       formData.append('student_name', studentName);
-      formData.append('student_id', studentId); // Append student ID
+      // formData.append('student_id', studentId); // Append student ID
       if (submittedFile) {
         formData.append('submittedFile', submittedFile);
       }
@@ -116,7 +116,7 @@ function QuestionForm({ setSubmissionId, setLoading, setError }) {
                     required
                   />
                 </div>
-                <div className="name-id-label">
+                {/* <div className="name-id-label">
                   <input
                     type="text"
                     value={studentId}
@@ -125,7 +125,7 @@ function QuestionForm({ setSubmissionId, setLoading, setError }) {
                     className="id-input"
                     required
                   />
-                </div>
+                </div> */}
               </div>
 
               <div className="question-type-label">
