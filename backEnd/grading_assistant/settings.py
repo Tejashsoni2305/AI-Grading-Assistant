@@ -21,7 +21,7 @@ import certifi
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-OPENAI_API_KEY="Enter key"
+OPENAI_API_KEY="enter key"
 
 
 # Quick-start development settings - unsuitable for production
