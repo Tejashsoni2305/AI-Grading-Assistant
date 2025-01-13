@@ -21,7 +21,7 @@ import certifi
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-OPENAI_API_KEY="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"
+OPENAI_API_KEY="Add your API key here"
 
 
 # Quick-start development settings - unsuitable for production
