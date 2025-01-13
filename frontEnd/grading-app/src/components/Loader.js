@@ -1,26 +1,9 @@
-import React from 'react';
+import React from "react";
 
 function Loader() {
-  const loaderStyle = {
-    display: 'inline-block',
-    width: '80px',
-    height: '80px',
-    border: '3px solid rgba(195, 195, 195, 0.6)',
-    borderRadius: '50%',
-    borderTop: '3px solid #333',
-    animation: 'spin 1s linear infinite',
-  };
-
-  const containerStyle = {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '100vh', // Full viewport height
-  };
-
   return (
-    <div style={containerStyle}>
-      <div style={loaderStyle}></div>
+    <div className="flex justify-center items-center h-screen">
+      <div className="w-20 h-20 border-4 border-gray-300 border-t-4 border-t-gray-800 rounded-full animate-spin"></div>
     </div>
   );
 }

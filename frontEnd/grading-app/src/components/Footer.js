@@ -1,14 +1,23 @@
 import React from 'react';
-import '../styles/Footer.css';  // Importing the Footer-specific CSS
 
 function Footer() {
   return (
-    <div className="footer">
-      <p>Grading Application © 2024</p>
-      <p>
-        Visit us: <a href="https://example.com">Our Website</a>
-      </p>
-    </div>
+    <footer className="bg-gray-800 text-white py-4">
+      <div className="container mx-auto text-center">
+        <p className="text-sm md:text-base">
+          Grading Application © {new Date().getFullYear()}
+        </p>
+        <p className="mt-2 text-sm md:text-base">
+          Visit us:{" "}
+          <a
+            href="https://example.com"
+            className="text-blue-400 hover:text-blue-300 transition duration-200"
+          >
+            Our Website
+          </a>
+        </p>
+      </div>
+    </footer>
   );
 }
 

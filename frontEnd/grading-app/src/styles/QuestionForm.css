@@ -12,24 +12,29 @@
   width: 500px; /* You can set a specific width to make it consistently wider */
   background-color: #ffffff; /* Explicitly set white background */
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  color: #1f2947; /* Ensure all text is consistent with form design */
 }
 
 /* Label for the question type dropdown */
-.question-type-label { 
+.question-type-label,
+.bulk-upload-label,
+.question-label,
+.answer-label {
   margin-bottom: 15px;
   font-weight: bold;
   font-size: 16px; /* Increased font size for better readability */
-  color: #00e1ff; /* Replace with desired color code */
+  color: #1f2947; /* Darker text color for visibility */
 }
 
 /* Dropdown select for question type */
 .question-type-select {
   margin-left: 10px;
   padding: 8px;
-  font-size: 14px;  /* Uniform font size */
+  font-size: 14px; /* Uniform font size */
   border-radius: 5px;
   border: 1px solid #0569d5;
   background-color: #f4efef;
+  color: #1f2947; /* Consistent text color inside dropdown */
 }
 
 /* Container for question and answer text areas */
@@ -40,123 +45,42 @@
   width: 100%;
 }
 
-/* Labels for question and answer fields */
-.question-label,
-.answer-label {
-  display: block;
-  margin-bottom: 8px;
-  font-size: 15px;
-  color: #00e1ff; /* Replace with desired color code */
-}
-
 /* Text area for question */
-.question-box {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #ccc;
-  border-radius: 6px;  /* Increased border-radius for a softer look */
-  font-size: 15px;
-  margin-bottom: 15px;  /* Increased margin for better spacing between fields */
-  background-color: #fff;
-  resize: vertical;  /* Allow vertical resizing */
-}
-
-/* Text area for answer */
+.question-box,
 .answer-box {
   width: 100%;
   padding: 12px;
   border: 1px solid #ccc;
-  border-radius: 6px;
+  border-radius: 6px; /* Increased border-radius for a softer look */
   font-size: 15px;
+  margin-bottom: 15px; /* Increased margin for better spacing between fields */
   background-color: #fff;
-  resize: vertical;  /* Allow vertical resizing */
+  color: #1f2947; /* Darker text color */
+  resize: vertical; /* Allow vertical resizing */
 }
 
-/* Container for Name and ID fields */
-.name-id-container {
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;  /* Add space between the two fields */
-  margin-bottom: 25px;  /* Increased bottom margin for more spacing */
+/* Placeholder styling */
+::placeholder {
+  color: #777; /* Neutral gray for placeholder text */
+  font-style: italic;
 }
 
 /* Name and ID input labels */
 .name-id-label {
   flex: 1;
-}
-
-/* Style for Name and ID input fields */
-.name-input, .id-input {
-  width: 100%;
-  padding: 10px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 6px;  /* Increased border-radius */
-  background-color: #fff;
-  box-sizing: border-box;
-  margin-bottom: 5px;  /* Add some spacing between the inputs and labels */
-}
-
-/* Style for submit button */
-.submit-btn {
-  padding: 12px 25px;  /* Adjusted padding for a larger clickable area */
-  font-size: 16px;
-  color: white;
-  background-color: #28a745;  /* Changed to a green color for action emphasis */
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;  /* Smooth transition effect */
-}
-
-/* Hover effect for submit button */
-.submit-btn:hover {
-  background-color: #218838;  /* Darker green on hover */
-}
-
-/* Placeholder styling */
-::placeholder {
-  color: #999;
-  font-style: italic;
-}
-
-/* Mobile responsiveness */
-@media (max-width: 600px) {
-  .question-form,
-  .bulk-upload-form {
-    padding: 20px;
-    max-width: 100%;  /* Make form full-width on smaller screens */
-  }
-
-  .name-id-container {
-    flex-direction: column;  /* Stack Name and ID inputs vertically on mobile */
-  }
-
-  .submit-btn {
-    width: 100%;  /* Full-width submit button on mobile */
-  }
+  font-weight: bold;
+  color: #1f2947; /* Dark color for visibility */
 }
 
 /* Toggle Button */
-.toggle-btn {
-  margin: 20px auto;
-  padding: 10px 20px;
-  font-size: 16px;
-  color: white;
-  background-color: #007bff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.toggle-btn:hover {
-  background-color: #0056b3;
+.toggle-label {
+  color: #1f2947; /* Ensure the toggle text is visible and consistent */
+  font-weight: bold;
 }
 
 /* Style for file input */
 input[type="file"] {
-  color: #007bff; /* Replace with your desired text color */
+  color: #1f2947; /* Dark text for file input */
   font-weight: bold; /* Optional: make text bold */
   font-size: 14px; /* Adjust font size if needed */
   cursor: pointer;
@@ -194,40 +118,10 @@ input[type="file"]::-moz-file-upload-button:hover {
   background-color: #218838;
 }
 
+/* Bulk upload container */
 .bulk-upload-container {
   display: flex;
   flex-direction: column;
   margin-bottom: 20px;
   width: 100%;
-}
-
-.bulk-upload-label {
-  font-size: 16px;
-  font-weight: bold;
-  margin-bottom: 10px;
-  color: #00e1ff;
-}
-
-/* Updated Name and ID input styles */
-.name-id-container {
-  display: flex;
-  justify-content: space-between;
-  gap: 20px; /* Space between Name and ID fields */
-  margin-bottom: 25px;
-}
-
-.name-id-label {
-  flex: 1; /* Ensures both inputs take equal space */
-}
-
-.name-input,
-.id-input {
-  width: 100%; /* Ensure equal width */
-  padding: 10px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  background-color: #fff;
-  box-sizing: border-box;
-  margin-bottom: 5px;
 }
